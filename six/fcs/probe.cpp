@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <memoryapi.h>
 #include <psapi.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -28,7 +29,6 @@ DWORD ListModules(const HANDLE hProcess)
 
     for(i = 0; i < len; i++)
     {
-        if ( i >= len ) { break; }
         TCHAR modName[MAX_PATH];
         if(!GetModuleFileNameEx(hProcess, lpModule[i], modName, sizeof(modName)/sizeof(TCHAR)))
         {
@@ -38,11 +38,10 @@ DWORD ListModules(const HANDLE hProcess)
         // obtain module information
         if (GetModuleInformation(hProcess, lpModule[i], &moduleInfo, sizeof(moduleInfo)))
         {
-           cout << "module name: " << moduleInfo.lpBaseOfDll << endl;
+           // char* modname = strrchr((const char*) moduleInfo.lpBaseOfDll, '\\');
+           cout << "module name: " << modName << endl;
            cout << "base address: 0x" << hex << moduleInfo.lpBaseOfDll << endl;
         }
-  
-        wcout << modName << endl;
     }
     
 
@@ -61,6 +60,12 @@ int main ( )
     ListModules(proc);
 
     cin >> pID;
+
+    cout << "test." << endl; 
+
+    do {
+         sleep(1);
+       } while ( true ); 
 
     return 0;
 }
